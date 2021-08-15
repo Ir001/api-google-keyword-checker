@@ -2,7 +2,7 @@ const express = require('express')
 const main = require('./main')
 const app = express()
 const port = process.env.PORT || 3000;
-app.get('/', async (req, res) => {
+app.get('/api/', async (req, res) => {
     const keyword = req.query?.keyword;
     if(keyword == undefined || keyword == '' || keyword == null){
         return res.json({success:false,message:'Keyword required'});
