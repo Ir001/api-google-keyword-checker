@@ -1,0 +1,22 @@
+{
+  "name": "keyword-checker",
+  "version": "1.0.0",
+  "description": "Google keyword checker\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google",
+    "keyword",
+    "checker"
+  ],
+  "author": "Irwan Antonio",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "express": "^4.17.1",
+    "user-agents": "^1.0.744"
+  }
+}
