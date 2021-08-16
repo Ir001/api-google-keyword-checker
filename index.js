@@ -21,7 +21,8 @@ app.post('/api/', async (req, res, next) => {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
         res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-        const rawBody = JSON.parse(req.rawBody);
+        const raw = req.rawBody?.replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": ');
+        const rawBody = JSON.parse(raw);
         const data = rawBody?.keywords.map(async (value,index)=>{
             if(value != null && value != undefined && value != ''){
                 return await main.request(value);
