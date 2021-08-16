@@ -12,13 +12,7 @@ main = {
         const $ = cheerio.load(data);
         const result = $('body').find('div[id=result-stats]')?.text()?.trim();
         const response = main.format(result);
-        return {
-            success : true,
-            data : {
-                keyword,
-                ...response
-            }
-        };
+        return {keyword,...response};
     },
     formatKeyword : (value)=>{
         const regex = /\s/g;

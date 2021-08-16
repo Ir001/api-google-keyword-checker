@@ -1,23 +1,44 @@
 const express = require('express')
-const main = require('./main')
+const bodyParser = require('body-parser');
+const main = require('./main');
+const { val } = require('cheerio/lib/api/attributes');
+const { response } = require('express');
 const app = express()
 const port = process.env.PORT || 3000;
-app.get('/api/', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    const keyword = req.query?.keyword;
-    if(keyword == undefined || keyword == '' || keyword == null){
-        return res.json({success:false,message:'Keyword required'});
-    }
-    try{
-        const response = await main.request(keyword);
-        return res.json(response);
-    }catch(err){
-        return res.json({success:false,message: err.toString()});
+app.use(function (req, res, next) {
+    var data = "";
+    req.on('data', function (chunk) {
+        data += chunk
+    })
+    req.on('end', function () {
+        req.rawBody = data;
+        next();
+    })
+})
+
+app.post('/api/', async (req, res, next) => {
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+        const rawBody = JSON.parse(req.rawBody);
+        const data = rawBody?.keywords.map(async (value,index)=>{
+            if(value != null && value != undefined && value != ''){
+                return await main.request(value);
+            }
+        })
+        const response = await Promise.all(data);
+        return res.json({
+            success: true,
+            data : response});
+    } catch (err) {
+        return res.json({
+            success: false,
+            message: err.toString()
+        });
     }
 })
 
 app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}`)
+    console.log(`Listening at http://localhost:${port}`)
 })
