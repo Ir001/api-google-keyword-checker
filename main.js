@@ -28,8 +28,8 @@ main = {
             const result = regex.exec(value);
             if(result?.[1] != undefined && result?.[2] != undefined){
                 response =  {
-                    'result' : parseFloat(result[1]?.replace(/\./g,'')),
-                    'time' : parseFloat(result[2]?.replace(/\,/g,'.')),
+                    'result' : parseFloat(result[1]?.replace(/\./g,'').replace(',', '.')),
+                    'time' : parseFloat(result[2]?.replace(/\./g,'').replace(',', '.')),
                 }
             }
         })
