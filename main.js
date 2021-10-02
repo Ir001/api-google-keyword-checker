@@ -4,9 +4,13 @@ const userAgent = require('user-agents');
 main = {
     request : async (keyword)=>{
         const ua = new userAgent({deviceCategory:'desktop'}).toString();
-        const {data} = await axios.get(`http://www.google.co.id/search?q=${main.formatKeyword(keyword)}`,{
+        const {data} = await axios.get(`http://www.google.co.id/search?q=${main.formatKeyword(keyword)}&aqs=edge.0.69i59j69i57.1023j0j4&sourceid=chrome&ie=UTF-8`,{
             headers : {
                 'User-Agent' : ua
+            },
+            proxy: {
+                host: 'localhost',
+                port: 3000
             }
         });
         const $ = cheerio.load(data);
