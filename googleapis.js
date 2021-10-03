@@ -1,11 +1,11 @@
 const axios = require('axios').default;
-const cheerio = require('cheerio');
 const userAgent = require('user-agents');
-main = {
+googleapis = {
     request : async (keyword)=>{
         try{
             const ua = new userAgent({deviceCategory:'desktop'}).toString();
-            const {data} = await axios.get(`http://www.google.com/search?q=${main.formatKeyword(keyword)}&sourceid=chrome&ie=UTF-8`,{
+            console.log(googleapis.formatKeyword(keyword));
+            const {data} = await axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyDLyvAmzjPQhYExny85ZGawRPMps5Dvs7c&cx=245e4667658debe04&q=${googleapis.formatKeyword(keyword)}`,{
                 headers : {
                     'User-Agent' : ua
                 },
@@ -13,13 +13,16 @@ main = {
                 //     host: 'localhost',
                 //     port: 3000,
                 //     auth: {username:'', password : ''},
-                //     protocol : 'http'
+                //     protocol : 'https'
                 // }
             });
-            const $ = cheerio.load(data);
-            const result = $('body').find('div[id=result-stats]')?.text()?.trim();
-            const response = main.format(result);
-            return {keyword,...response};
+            const searchInformation = data?.searchInformation;
+
+            return {
+                keyword,
+                result : parseFloat(searchInformation?.totalResults),
+                time : parseFloat(searchInformation?.searchTime),
+            };
         }catch(err){
             console.log(err);
             return {keyword, result : 0, time : 0};
@@ -48,4 +51,4 @@ main = {
     },
 };
 
-module.exports = main;
+module.exports = googleapis;

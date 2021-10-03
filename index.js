@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const main = require('./main');
+const googleapis = require('./googleapis');
 const { val } = require('cheerio/lib/api/attributes');
 const { response } = require('express');
 const app = express()
@@ -25,6 +26,29 @@ app.post('/api/', async (req, res, next) => {
         const data = rawBody?.keywords.map(async (value,index)=>{
             if(value != null && value != undefined && value != ''){
                 return await main.request(value);
+            }
+        })
+        const response = await Promise.all(data);
+        return res.json({
+            success: true,
+            data : response});
+    } catch (err) {
+        return res.json({
+            success: false,
+            message: err.toString()
+        });
+    }
+})
+app.post('/api/v2', async (req, res, next) => {
+    try {
+        console.log(req);
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        res.header('Access-Control-Allow-Methods', 'POST');
+        const rawBody = JSON.parse(req.rawBody);
+        const data = rawBody?.keywords.map(async (value,index)=>{
+            if(value != null && value != undefined && value != ''){
+                return await googleapis.request(value);
             }
         })
         const response = await Promise.all(data);
