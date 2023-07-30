@@ -1,9 +1,6 @@
 {
   "name": "keyword-checker",
   "version": "1.0.0",
-  "engines": {
-    "node": "14.16.x"
-  },
   "description": "Google keyword checker\"",
   "main": "index.js",
   "scripts": {

@@ -2,8 +2,6 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const main = require('./main');
 const googleapis = require('./googleapis');
-const { val } = require('cheerio/lib/api/attributes');
-const { response } = require('express');
 const app = express()
 const port = process.env.PORT || 3000;
 app.use(function (req, res, next) {
